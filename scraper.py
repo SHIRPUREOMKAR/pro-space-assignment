@@ -14,13 +14,13 @@ import time
 # ------------------------------------------------------------------------------------------------------------------
 
 url = "https://www.google.com/search?q=+%22Software+Developers%22 -intitle:%22profiles%22 -inurl:%22dir/+%22+site:linkedin.com/in/+OR+site:linkedin.com/pub/"
-number_of_swipes = 1
+number_of_swipes = 20
 
 # ------------------------------------------------------------------------------------------------
 
 def write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data):
-    with open('data.csv', 'a', encoding='utf-8') as file:
-        file.write(f'"{name}", "{url}", "{role}", "{current_workplace_data}", "{education_data}"\n')
+    with open('./data/data.csv', 'a', encoding='utf-8') as file:
+        file.write(f'"{name}", "{url}", "{role}", "{current_workplace_data}", "{education_data}", "{about_data}"\n')
 
 # ------------------------------------------------------------------------------------------------
 
@@ -209,7 +209,8 @@ def analyse(html):
                         get_profile_pages(text, url)
 
 def main():
-    with open('data.csv', 'w', encoding='utf-8') as file:
+    
+    with open('./data/data.csv', 'w', encoding='utf-8') as file:
         file.write('Name,URL,Role,Current Workplace,Education, About\n')
     html = gather_data_from_google_search()
     analyse(html)

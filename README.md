@@ -3,14 +3,14 @@
 ## Prerequisites
 
 - Python 3.6 or higher
-- Libraries: `requests`, `beautifulsoup4`, `selenium`
+- Libraries: `requests`, `beautifulsoup4`, `selenium`, `psycopg2`
 
 ## Setup
 
 1. Install the required Python libraries with pip:
 
     ```bash
-    pip install requests beautifulsoup4 selenium
+    pip install requests beautifulsoup4 selenium psycopg2
     ```
 
 ## Process
@@ -58,3 +58,13 @@
 <br>
 
 > The data of `emails`, `Past Experience`, etc are controversial but is Public so I've proceeded to collect it.
+
+In the `scraper.py` script, there are a few parameters you can change:
+
+> `url`: This is the URL of the Google search results page. You can change the search query to scrape different LinkedIn profiles.
+
+> `number_of_swipes`: This is the number of times the script will scroll down on the Google search results page to load more results. You can increase this number to scrape more profiles.
+
+The comments in the code explain the process during the extraction. postgreSQL (.sql) file will be included in the data and the images are self explanatory.
+
+> Thanks..!!
