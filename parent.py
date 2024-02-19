@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 import time
-import random
 
 # Gathering data from Google search results using Selenium
 # The goal is to get the names, roles, URLs of the LinkedIn profiles of Software Developers
@@ -15,7 +14,7 @@ import random
 # ------------------------------------------------------------------------------------------------------------------
 
 url = "https://www.google.com/search?q=+%22Software+Developers%22 -intitle:%22profiles%22 -inurl:%22dir/+%22+site:linkedin.com/in/+OR+site:linkedin.com/pub/"
-number_of_swipes = 40
+number_of_swipes = 50
 
 # ------------------------------------------------------------------------------------------------
 
