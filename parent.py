@@ -103,7 +103,7 @@ def main():
     # urls = extract_name_and_role(html)
     urls, names, roles = extract_name_and_role(html)
 
-    with open('./data/data-small.csv', 'w', encoding='utf-8') as file:
+    with open('./data/data-mini.csv', 'w', encoding='utf-8') as file:
         # file.write('Name,URL,Role\n')
         for i in range(len(urls)):
             file.write(f'{names[i]},{urls[i]},{roles[i]}\n')
