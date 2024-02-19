@@ -24,6 +24,28 @@
 
 <br>
 
+## Usage
+
+Run: 
+``` python
+python ./parent.py
+```
+
+A data-set `data-mini.csv` is formed in `./data/` directory along with that `data.csv` is also initiated. `data-mini.csv` contains basic details like `name`, `role` and for now, most importantly, `profile_URL`. Now you may analyse the size of `data-mini.csv` and according to that engage multiple `minions.py` to download and process data faster simultaneously.
+
+Run:
+```
+python ./minion.py
+>>> Enter the starting index: <start_index as per your choice>
+>>> Enter the ending index: <end_index as per your choice>
+```
+
+The data of all the profiles will simultaneously be appended to the `data.csv`. And further processed to postgreSQL.
+
+<br>
+
+## Process
+
 1. Initially, I considered using the LinkedIn APIs available for public or developer use. However, they were either deprecated or not relevant (mostly for scraping jobs, not profiles).
 
 2. The most relevant and straightforward method I found was to use Google search with some filters, such as:
@@ -31,17 +53,17 @@
     - The site filter "site:" as `"site:linkedin.com/in/" OR "site:linkedin.com/pub/"`
     - And since searching for profiles the intitle filter as `-intitle:"profiles`
     - The job profile as simply `"Software Developer"`
-    - Email by adding `"@gmail.com" OR "@yahoo.com"`
+    - Email by adding `"@gmail.com" OR "@yahoo.com"` (not done here)
     - Location can also be added as a field with `Software Developer` (not done for this case).
 
 - Final `url` used was `https://www.google.com/search?q=+"Software+Developers" -intitle:"profiles" -inurl:"dir/+"+site:linkedin.com/in/+OR+site:linkedin.com/pub/`
 
 <br>
 
-3. By this method, for each person, majority of the data as `name`, `profile URL`, `email`, `position` is obtained. We just need to extract the data from parsing the request by passing the URL (in which we applied filters)
+3. By this method, for each person, majority of the data as `name`, `profile URL`, `position` is obtained. We just need to extract the data from parsing the request by passing the URL (in which we applied filters)
 
 
-4. For the fields as `Current Position`, `Skills` and other possible data is a bit tough. But I thought to get it by now parsing the individual `profile URL`, since we git it in previous step.
+4. For the fields as `Current Position`, `Past Experiences`, `Education`, `About` and other possible data is a bit tough. But I thought to get it by now parsing the individual `profile URL`, since we get it in previous step.
 
 5. I've used `Selenium` to prevent the cached count of requested pages as it opens a completely new Chromium window each time.
 
@@ -57,9 +79,7 @@
 
 <br>
 
-> The data of `emails`, `Past Experience`, etc are controversial but is Public so I've proceeded to collect it.
-
-In the `scraper.py` script, there are a few parameters you can change:
+In the `./xtras/scraper.py` or `./parent.py` script, there are a few parameters you can change:
 
 > `url`: This is the URL of the Google search results page. You can change the search query to scrape different LinkedIn profiles.
 
@@ -67,6 +87,5 @@ In the `scraper.py` script, there are a few parameters you can change:
 
 The comments in the code explain the process during the extraction. postgreSQL (.sql) file will be included in the data and the images are self explanatory.
 
-- Another set of faster implementation of `scrapper.py` is done by using the `parent.py` and the `minions.py`, which basically gets the data (urls) to be traversed (by parent) and the minions can be run simultaneously to populate the data simultaneously, instead of doing it linearly one at a time.
 
 > Thanks..!!
