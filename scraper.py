@@ -182,9 +182,6 @@ def analyse(html):
     # observed that the URLs are in the 'ping' attribute of the <a> tag within the <span> tag with the 'jsname' attribute set to 'UWckNb'
     span_tags = soup.find_all('span', {'jscontroller': 'msmzHf'})
 
-    with open('urls.csv', 'w', encoding='utf-8') as file:
-        file.write('Name,Role,URL\n')
-
     for span in span_tags:
         a = span.find('a', {'jsname': 'UWckNb'})
         if a:
