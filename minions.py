@@ -79,42 +79,26 @@ def extract_current_workplace_data(html):
 # ------------------------------------------------------------------------------------------------
 
 def get_profile_pages(name, url, role):
-    driver = webdriver.Chrome()
-    driver.get(url)
+    try:
+        driver = webdriver.Chrome()
+        driver.get(url)
 
-    # A modal appears when opened the website. Wait for it to appear and then close it
-    wait = WebDriverWait(driver, 20)
-    modal_close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-tracking-control-name="public_profile_contextual-sign-in-modal_modal_dismiss"]')))
-    
-    time.sleep(random.randint(1, 3))
-    modal_close_button.click()
+        # A modal appears when opened the website. Wait for it to appear and then close it
+        wait = WebDriverWait(driver, 5)
+        modal_close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-tracking-control-name="public_profile_contextual-sign-in-modal_modal_dismiss"]')))
 
-    # Sleep for 20 seconds
-    time.sleep(random.randint(1, 3))
+        modal_close_button.click()
 
-    # Save the page
-    html = driver.page_source
-    driver.quit()
+        # Save the page
+        html = driver.page_source
+        driver.quit()
 
-    time.sleep(3)
-
-    # --------for debug purposes--------
-    # with open(f"ji{i}.html", "w", encoding='utf-8') as f:
-    #     f.write(html)
-    #     f.close()
-    
-    # --------for debug purposes--------
-    # with open(f"ji{i}.html", "r", encoding='utf-8') as f:
-    #     html = f.read()
-    #     f.close()
-    
-    education_data = extract_education_data(html)
-    # print(education_data)
-    about_data = extract_about_data(html)
-    # print(about_data)
-    current_workplace_data = extract_current_workplace_data(html)
-    # print(current_workplace_data)
-    write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data)
+        education_data = extract_education_data(html)
+        about_data = extract_about_data(html)
+        current_workplace_data = extract_current_workplace_data(html)
+        write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data)
+    except Exception as e:
+        print(f"An error occurred while processing the URL {url}: {str(e)}")
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -127,9 +111,9 @@ def main():
     with open('./data/data-small.csv', 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
-    start = int(input('Enter the starting index: '))
-    end = int(input('Enter the ending index: '))
-    lines = lines[start:end]
+    # start = int(input('Enter the starting index: '))
+    # end = int(input('Enter the ending index: '))
+    # lines = lines[start:end]
 
     for line in lines:
         name, url, role = line.strip().split(',')
@@ -137,7 +121,7 @@ def main():
         print(url)
         get_profile_pages(name, url, role)
 
-    print(f'Data extraction complete for index {start} to {end}. Check data.csv for the results.')
+    print(f'Data extraction complete. Check data.csv for the results.')
 
 if __name__ == "__main__":
     main()
