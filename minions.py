@@ -111,9 +111,9 @@ def main():
     with open('./data/data-small.csv', 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
-    # start = int(input('Enter the starting index: '))
-    # end = int(input('Enter the ending index: '))
-    # lines = lines[start:end]
+    start = int(input('Enter the starting index: '))
+    end = int(input('Enter the ending index: '))
+    lines = lines[start:end]
 
     for line in lines:
         name, url, role = line.strip().split(',')
@@ -121,7 +121,7 @@ def main():
         print(url)
         get_profile_pages(name, url, role)
 
-    print(f'Data extraction complete. Check data.csv for the results.')
+    print(f'Data extraction completed for index {start} to {end}. Check data.csv for the results.')
 
 if __name__ == "__main__":
     main()

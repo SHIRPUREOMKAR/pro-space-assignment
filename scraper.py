@@ -98,44 +98,48 @@ def extract_current_workplace_data(html):
 # ------------------------------------------------------------------------------------------------
 
 def get_profile_pages(text, url):
-    driver = webdriver.Chrome()
-    driver.get(url)
+    try:
 
-    # A modal appears when opened the website. Wait for it to appear and then close it
-    wait = WebDriverWait(driver, 20)
-    modal_close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-tracking-control-name="public_profile_contextual-sign-in-modal_modal_dismiss"]')))
-    
-    time.sleep(random.randint(1, 3))
-    modal_close_button.click()
+        driver = webdriver.Chrome()
+        driver.get(url)
 
-    # Sleep for 20 seconds
-    time.sleep(random.randint(5, 10))
+        # A modal appears when opened the website. Wait for it to appear and then close it
+        wait = WebDriverWait(driver, 20)
+        modal_close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-tracking-control-name="public_profile_contextual-sign-in-modal_modal_dismiss"]')))
+        
+        time.sleep(random.randint(1, 3))
+        modal_close_button.click()
 
-    # Save the page
-    html = driver.page_source
-    driver.quit()
+        # Sleep for 20 seconds
+        time.sleep(random.randint(5, 10))
 
-    time.sleep(3)
+        # Save the page
+        html = driver.page_source
+        driver.quit()
 
-    # --------for debug purposes--------
-    # with open(f"ji{i}.html", "w", encoding='utf-8') as f:
-    #     f.write(html)
-    #     f.close()
-    
-    # --------for debug purposes--------
-    # with open(f"ji{i}.html", "r", encoding='utf-8') as f:
-    #     html = f.read()
-    #     f.close()
-    
-    education_data = extract_education_data(html)
-    # print(education_data)
-    about_data = extract_about_data(html)
-    # print(about_data)
-    current_workplace_data = extract_current_workplace_data(html)
-    # print(current_workplace_data)
-    name, role = extract_name_and_role(text)
-    write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data)
+        time.sleep(3)
 
+        # --------for debug purposes--------
+        # with open(f"ji{i}.html", "w", encoding='utf-8') as f:
+        #     f.write(html)
+        #     f.close()
+        
+        # --------for debug purposes--------
+        # with open(f"ji{i}.html", "r", encoding='utf-8') as f:
+        #     html = f.read()
+        #     f.close()
+        
+        education_data = extract_education_data(html)
+        # print(education_data)
+        about_data = extract_about_data(html)
+        # print(about_data)
+        current_workplace_data = extract_current_workplace_data(html)
+        # print(current_workplace_data)
+        name, role = extract_name_and_role(text)
+        write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data)
+    except Exception as e:
+        print(e)
+        print(f"Error for {url}")
 
 # ------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------

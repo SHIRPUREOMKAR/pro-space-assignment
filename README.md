@@ -67,4 +67,6 @@ In the `scraper.py` script, there are a few parameters you can change:
 
 The comments in the code explain the process during the extraction. postgreSQL (.sql) file will be included in the data and the images are self explanatory.
 
+- Another set of faster implementation of `scrapper.py` is done by using the `parent.py` and the `minions.py`, which basically gets the data (urls) to be traversed (by parent) and the minions can be run simultaneously to populate the data simultaneously, instead of doing it linearly one at a time.
+
 > Thanks..!!
