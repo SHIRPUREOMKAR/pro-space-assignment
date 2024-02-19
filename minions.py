@@ -84,7 +84,7 @@ def get_profile_pages(name, url, role):
         driver.get(url)
 
         # A modal appears when opened the website. Wait for it to appear and then close it
-        wait = WebDriverWait(driver, 5)
+        wait = WebDriverWait(driver, 4)
         modal_close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '[data-tracking-control-name="public_profile_contextual-sign-in-modal_modal_dismiss"]')))
 
         modal_close_button.click()
