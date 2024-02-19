@@ -31,7 +31,7 @@ Run:
 python ./parent.py
 ```
 
-A data-set `data-mini.csv` is formed in `./data/` directory along with that `data.csv` is also initiated. `data-mini.csv` contains basic details like `name`, `role` and for now, most importantly, `profile_URL`. Now you may analyse the size of `data-mini.csv` and according to that engage multiple `minions.py` to download and process data faster simultaneously.
+A data-set `data-mini.csv` is formed in `./data/` directory along with that `data.csv` is also initiated. `data-mini.csv` contains basic details like `name`, `role` and for now, most importantly, `profile_URL`. Now you may analyse the size of `data-mini.csv` and according to that engage multiple `minion.py` to download and process data faster simultaneously.
 
 Run:
 ```
@@ -87,5 +87,6 @@ In the `./xtras/scraper.py` or `./parent.py` script, there are a few parameters 
 
 The comments in the code explain the process during the extraction. postgreSQL (.sql) file will be included in the data and the images are self explanatory.
 
+> The `Past Experience` field is not in the current `data.csv` but is implemented later into the `./xtras/scrapper.py` and `./minion.py`. The re-run for the entire data was time consuming and also the IP-address was restricted to request the data. The re-run of `./parent.py` and `./minion.py` will populate that field too.
 
 > Thanks..!!
