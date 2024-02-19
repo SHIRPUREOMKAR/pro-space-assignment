@@ -7,17 +7,13 @@ from bs4 import BeautifulSoup
 from urllib.parse import unquote
 import time
 import random
+import csv
 
 # Gathering data from Google search results using Selenium
 # The goal is to get the names, roles, URLs of the LinkedIn profiles of Software Developers
 
 # The search query is: "Software Developers" -intitle:"profiles" -inurl:"dir /" site:linkedin.com/in/ OR site:linkedin.com/pub/
 # ------------------------------------------------------------------------------------------------------------------
-
-url = "https://www.google.com/search?q=+%22Software+Developers%22 -intitle:%22profiles%22 -inurl:%22dir/+%22+site:linkedin.com/in/+OR+site:linkedin.com/pub/"
-number_of_swipes = 20
-
-# ------------------------------------------------------------------------------------------------
 
 def write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data):
     with open('./data/data.csv', 'a', encoding='utf-8') as file:
@@ -44,21 +40,6 @@ def extract_education_data(html):
         education_data.append(f'institute_name: {institute_name} - degree: {degree}')
 
     return '; '.join(education_data)
-
-# ------------------------------------------------------------------------------------------------
-
-def extract_name_and_role(text):
-    text = text.replace('...','')
-    text = text.replace(',','')
-    parts = text.split(' - ')
-    if len(parts) > 1:
-        # remove , from parts
-        name = parts[0]
-        role = parts[1]
-    else:
-        name = text
-        role = 'Role not found'
-    return name, role
 
 # ------------------------------------------------------------------------------------------------
 
@@ -97,7 +78,7 @@ def extract_current_workplace_data(html):
 
 # ------------------------------------------------------------------------------------------------
 
-def get_profile_pages(text, url):
+def get_profile_pages(name, url, role):
     driver = webdriver.Chrome()
     driver.get(url)
 
@@ -109,7 +90,7 @@ def get_profile_pages(text, url):
     modal_close_button.click()
 
     # Sleep for 20 seconds
-    time.sleep(random.randint(5, 10))
+    time.sleep(random.randint(1, 3))
 
     # Save the page
     html = driver.page_source
@@ -133,47 +114,7 @@ def get_profile_pages(text, url):
     # print(about_data)
     current_workplace_data = extract_current_workplace_data(html)
     # print(current_workplace_data)
-    name, role = extract_name_and_role(text)
     write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data)
-
-
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# Gathering data from Google search results using Selenium
-    
-def gather_data_from_google_search():
-    options = Options()
-    options.headless = True
-    driver = webdriver.Chrome(options=options)
-
-    driver.get(url)
-
-    # There might be a small verification required to prove that you are not a robot. You may need to pass it manually, thats why adding a sleep here.
-    time.sleep(15)
-
-    for _ in range(number_of_swipes):
-
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-
-        # wait for the "More results" button to be present, and then click it
-        try:
-            more_results = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "RVQdVd")))
-            more_results.click()
-
-        except Exception as e:
-            print("More results button not found")
-
-    html = driver.page_source
-
-    driver.quit()
-
-    # # save the source code to a file
-    # # -------for debug purposes-------
-    # with open('search-result.html', 'w', encoding='utf-8') as f2:
-    #     f2.write(html)
-
-    return html
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -181,43 +122,22 @@ def gather_data_from_google_search():
 # Processing the HTML to extract the data
 # Some patterns were observed in the HTML that can be used to extract the data which are described in functions
 
-def analyse(html):
-    soup = BeautifulSoup(html, 'html.parser')
-
-    # observed that the URLs are in the 'ping' attribute of the <a> tag within the <span> tag with the 'jsname' attribute set to 'UWckNb'
-    span_tags = soup.find_all('span', {'jscontroller': 'msmzHf'})
-
-    for span in span_tags:
-        a = span.find('a', {'jsname': 'UWckNb'})
-        if a:
-            ping = a.get('ping')
-            if ping:
-                parts = ping.split('&')
-                for part in parts:
-                    # if the part starts with 'url=' and contains 'linkedin', extract the URL
-                    if part.startswith('url=') and "linkedin" in part:
-                        url = part[4:]
-                        url = unquote(url)
-                        # find the <h3> tag within the <span> tag and extract the name
-                        h3 = span.find('h3')
-                        if h3:
-                            # observation that 'name', 'role' and 'working at' was split by ' - ' and the name was the first part
-                            text = h3.text
-                            # save it in a list and if list size if >=2 then only add name and role to the file
-                            
-                        # export the text and url to a file
-                        print(text)
-                        
-                        get_profile_pages(text, url)
 
 def main():
-    
-    with open('./data/data.csv', 'w', encoding='utf-8') as file:
-        file.write('Name,URL,Role,Current Workplace,Education, About\n')
-    html = gather_data_from_google_search()
-    analyse(html)
+    with open('./data/data-small.csv', 'r', encoding='utf-8') as file:
+        lines = file.readlines()
 
-    print('Data extraction complete. Check data.csv for the results.')
+    start = int(input('Enter the starting index: '))
+    end = int(input('Enter the ending index: '))
+    lines = lines[start:end]
+
+    for line in lines:
+        name, url, role = line.strip().split(',')
+        url = url.strip()  # Strip leading/trailing white spaces
+        print(url)
+        get_profile_pages(name, url, role)
+
+    print(f'Data extraction complete for index {start} to {end}. Check data.csv for the results.')
 
 if __name__ == "__main__":
     main()
