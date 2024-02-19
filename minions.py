@@ -139,18 +139,21 @@ def get_profile_pages(name, url, role):
 
 
 def main():
-    with open('./data/data-small.csv', 'r', encoding='utf-8') as file:
+    with open('./data/data-mini.csv', 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
     start = int(input('Enter the starting index: '))
     end = int(input('Enter the ending index: '))
     lines = lines[start:end]
+    counter = 0
 
     for line in lines:
         name, url, role = line.strip().split(',')
         url = url.strip()  # Strip leading/trailing white spaces
-        print(url)
+        # print(url)
+        print (f'>>>> Processing index : {start + counter} ({counter} / {len(lines)}): -----------------')
         get_profile_pages(name, url, role)
+        counter += 1
 
     print(f'Data extraction completed for index {start} to {end}. Check data.csv for the results.')
 
