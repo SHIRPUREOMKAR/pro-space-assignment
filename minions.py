@@ -15,9 +15,9 @@ import csv
 # The search query is: "Software Developers" -intitle:"profiles" -inurl:"dir /" site:linkedin.com/in/ OR site:linkedin.com/pub/
 # ------------------------------------------------------------------------------------------------------------------
 
-def write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data):
+def write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data, past_experience_data):
     with open('./data/data.csv', 'a', encoding='utf-8') as file:
-        file.write(f'"{name}", "{url}", "{role}", "{current_workplace_data}", "{education_data}", "{about_data}"\n')
+        file.write(f'"{name}", "{url}", "{role}", "{current_workplace_data}", "{past_experience_data}", "{education_data}", "{about_data}"\n')
 
 # ------------------------------------------------------------------------------------------------
 
@@ -78,6 +78,31 @@ def extract_current_workplace_data(html):
 
 # ------------------------------------------------------------------------------------------------
 
+def extract_experience_data(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    experience_section = soup.find('section', {'data-section': 'experience'})
+    if not experience_section:
+        return 'No experience details found'
+
+    experience_list = experience_section.find('ul', {'class': 'experience__list'})
+    if not experience_list:
+        return 'No experience details found'
+
+    experience_data = []
+    for li in experience_list.find_all('li', {'class': 'profile-section-card'}):
+        company_name = li.find('h3').text.strip()
+        company_name = company_name.replace('\n', ' ')
+        job_title = li.find('h4').text.strip()
+        job_title = job_title.replace('\n', ' ')
+        duration = li.find('span', {'class': 'date-range'}).text.strip()
+        duration = duration.replace('\n', ' ')
+        duration = duration.replace('\t', ' ')
+        experience_data.append(f'Worked at: {company_name} - Job Title: {job_title} - Duration: {duration}')
+
+    return '; '.join(experience_data)
+
+# ------------------------------------------------------------------------------------------------
+
 def get_profile_pages(name, url, role):
     try:
         driver = webdriver.Chrome()
@@ -93,10 +118,16 @@ def get_profile_pages(name, url, role):
         html = driver.page_source
         driver.quit()
 
+        # if not os.path.exists('./html'):
+        #     os.makedirs('./html')
+        # with open(f'./html/{name}.html', 'w', encoding='utf-8') as file:
+        #     file.write(html)
+
         education_data = extract_education_data(html)
         about_data = extract_about_data(html)
         current_workplace_data = extract_current_workplace_data(html)
-        write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data)
+        past_experience_data = extract_experience_data(html)
+        write_data_to_csv(name, url, role, education_data, about_data, current_workplace_data, past_experience_data)
     except Exception as e:
         print(f"An error occurred while processing the URL {url}: {str(e)}")
 

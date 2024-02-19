@@ -110,7 +110,7 @@ def main():
     # # print(urls)
         
     with open('./data/data.csv', 'w', encoding='utf-8') as file:
-        file.write('Name,URL,Role,Current Workplace,Education, About\n')
+        file.write('Name,URL,Role,Current Workplace,Past Experience,Education,About\n')
 
     print('Data extraction complete. Check data.csv for the results.')
 
