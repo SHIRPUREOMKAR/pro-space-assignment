@@ -75,7 +75,7 @@ The data of all the profiles will simultaneously be appended to the `data.csv`. 
 
 6. After this, most of the processing is to be done by parsing the data recieved, finding the spans containing data using `BeautifulSoup` library.
 
-7. In the end we get all the required data, namely, `name`, `profile URL`, `Current Position`. I've also included the fields of `About`, `Past Experiences`, `Education`, which can be potentially useful for Skills.
+7. In the end we get all the required data, namely, `name`, `profile URL`, `Current Position`, etc. I've also included the fields of `About`, `Past Experiences`, `Education`, which can also be potentially useful for Skills.
 
 <br>
 
